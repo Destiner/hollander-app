@@ -22,10 +22,17 @@ import '@fontsource/nunito/700.css';
     'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
   --font-mono: 'Menlo', 'Consolas', 'Monaco', 'Liberation Mono',
     'Lucida Console', monospace;
+  --color-background: #f9f4e7;
+  --color-text: #31312d;
+  --color-accent: #625598;
 }
 
 body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-text);
   font-family: var(--font-sans);
+  font-weight: 700;
 }
 
 /* Reset */
