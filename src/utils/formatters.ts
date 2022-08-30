@@ -15,6 +15,10 @@ function fromWei(address: string, amount: bigint): number {
   return parseFloat(formatUnits(amount, decimals));
 }
 
+function formatAddress(address: string): string {
+  return `${address.substring(0, 8)}…${address.substring(36)}`;
+}
+
 function getDecimals(address: string): number {
   const map: Record<string, number> = {
     [USDC_TESTNET_ADDRESS]: 6,
@@ -25,4 +29,4 @@ function getDecimals(address: string): number {
   return map[address];
 }
 
-export { fromWei, toWei };
+export { formatAddress, fromWei, toWei };
