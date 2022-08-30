@@ -9,8 +9,8 @@ const routerHistory = createWebHistory();
 const router = createRouter({
   history: routerHistory,
   routes: [
-    { path: '/', component: Home },
-    { path: '/auction/new', component: NewAuction },
+    { path: '/', name: 'home', component: Home },
+    { path: '/auction/new', name: 'auction-new', component: NewAuction },
   ],
 });
 
