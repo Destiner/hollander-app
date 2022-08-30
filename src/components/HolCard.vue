@@ -4,7 +4,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
 .card {
   padding: 10px;
   border: 4px solid var(--color-text);
