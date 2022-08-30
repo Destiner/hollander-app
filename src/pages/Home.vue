@@ -6,7 +6,10 @@
         <div>No MEV, low slippage.</div>
       </div>
       <div>
-        <HolButton label="Create" />
+        <HolButton
+          label="Create"
+          @click="openNewAuctionPage"
+        />
       </div>
     </div>
     <div class="auctions">
@@ -42,8 +45,18 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 import AuctionCard from '@/components/AuctionCard.vue';
 import HolButton from '@/components/HolButton.vue';
+
+const router = useRouter();
+
+function openNewAuctionPage(): void {
+  router.push({
+    name: 'auction-new',
+  });
+}
 </script>
 
 <style scoped>
