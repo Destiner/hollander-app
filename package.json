@@ -24,6 +24,7 @@
   "dependencies": {
     "@ethersproject/units": "^5.7.0",
     "@fontsource/nunito": "^4.5.10",
+    "@metamask/jazzicon": "^2.0.0",
     "vue": "3.2.37",
     "vue-router": "4.1.3"
   },
