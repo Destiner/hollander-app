@@ -1,7 +1,7 @@
 <template>
   <header>
     <div>
-      Hollander
+      <router-link :to="{ name: 'home' }">Hollander</router-link>
       <HolButton label="Connect" />
     </div>
   </header>
@@ -25,5 +25,10 @@ div {
   height: 64px;
   padding: 24px;
   font-size: 20px;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: none;
 }
 </style>
