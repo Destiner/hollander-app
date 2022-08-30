@@ -61,7 +61,6 @@ defineProps<{
   display: flex;
   gap: 16px;
   flex-direction: column;
-  min-width: 420px;
 }
 
 .header,
