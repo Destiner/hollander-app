@@ -8,10 +8,14 @@
   </div>
 </template>
 
+<script setup lang="ts">
+import '@fontsource/nunito/700.css';
+</script>
+
 <style>
 :root {
-  --font-sans: -apple-system, 'BlinkMacSystemFont', avenir next, avenir,
-    segoe ui, helvetica neue, helvetica, 'Ubuntu', roboto, noto, arial,
+  --font-sans: 'Nunito', -apple-system, 'BlinkMacSystemFont', avenir next,
+    avenir, segoe ui, helvetica neue, helvetica, 'Ubuntu', roboto, noto, arial,
     sans-serif;
   --font-serif: 'Iowan Old Style', 'Apple Garamond', 'Baskerville',
     'Times New Roman', 'Droid Serif', 'Times', 'Source Serif Pro', serif,
