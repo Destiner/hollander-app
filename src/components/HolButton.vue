@@ -21,5 +21,6 @@ button {
 
 button:hover {
   background: var(--color-accent-lighter);
+  cursor: pointer;
 }
 </style>
