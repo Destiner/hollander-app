@@ -3,11 +3,15 @@ import { createWebHistory, createRouter } from 'vue-router';
 
 import App from './App.vue';
 import Home from './pages/Home.vue';
+import NewAuction from './pages/NewAuction.vue';
 
 const routerHistory = createWebHistory();
 const router = createRouter({
   history: routerHistory,
-  routes: [{ path: '/', component: Home }],
+  routes: [
+    { path: '/', component: Home },
+    { path: '/auction/new', component: NewAuction },
+  ],
 });
 
 const app = createApp(App);
