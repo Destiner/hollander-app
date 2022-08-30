@@ -22,10 +22,10 @@ import HolButton from '@/components/HolButton.vue';
 }
 
 .hero {
-  margin: 64px 0 32px;
   display: flex;
-  flex-direction: column;
   gap: 16px;
+  flex-direction: column;
+  margin: 64px 0 32px;
 }
 
 .hero-text {
