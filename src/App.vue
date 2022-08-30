@@ -26,6 +26,7 @@ import HolHeader from '@/components/HolHeader.vue';
   --color-background: #f9f4e7;
   --color-text: #31312d;
   --color-accent: #625598;
+  --color-accent-lighter: #7364b3;
 }
 
 body {
