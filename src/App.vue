@@ -1,15 +1,16 @@
 <template>
   <div id="app">
-    <div>
-      <router-link :to="'/'"> Home </router-link>
-      <router-link :to="'/about'"> About </router-link>
-    </div>
+    <HolHeader />
     <router-view />
+    <HolFooter />
   </div>
 </template>
 
 <script setup lang="ts">
 import '@fontsource/nunito/700.css';
+
+import HolFooter from '@/components/HolFooter.vue';
+import HolHeader from '@/components/HolHeader.vue';
 </script>
 
 <style>
