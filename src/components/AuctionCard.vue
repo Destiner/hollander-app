@@ -1,5 +1,8 @@
 <template>
-  <HolCard class="auction">
+  <HolCard
+    class="auction"
+    @click="openAuction"
+  >
     <div class="header">
       <HolAsset
         show-icon
@@ -41,12 +44,17 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router';
+
 import HolAsset from './HolAsset.vue';
 import HolCard from './HolCard.vue';
 
 import { fromWei } from '@/utils/formatters';
 
-defineProps<{
+const router = useRouter();
+
+const props = defineProps<{
+  address: string;
   assetIn: string;
   assetOut: string;
   amountIn: bigint;
@@ -54,6 +62,15 @@ defineProps<{
   amountOutTotal: bigint;
   price: bigint;
 }>();
+
+function openAuction(): void {
+  router.push({
+    name: 'auction',
+    params: {
+      address: props.address,
+    },
+  });
+}
 </script>
 
 <style scoped>

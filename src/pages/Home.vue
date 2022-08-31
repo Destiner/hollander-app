@@ -16,6 +16,7 @@
       <h2>Latest auctions</h2>
       <div class="cards">
         <AuctionCard
+          address="0x1"
           asset-in="0xc"
           asset-out="0xa"
           :amount-in="1800000000000000000n"
@@ -24,6 +25,7 @@
           :price="1500000000000000n"
         />
         <AuctionCard
+          address="0x2"
           asset-in="0xc"
           asset-out="0xb"
           :amount-in="56720000000000000000n"
@@ -32,6 +34,7 @@
           :price="3200000000000000n"
         />
         <AuctionCard
+          address="0x3"
           asset-in="0xa"
           asset-out="0xc"
           :amount-in="2143900000n"
