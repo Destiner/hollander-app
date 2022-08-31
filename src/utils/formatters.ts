@@ -19,6 +19,36 @@ function formatAddress(address: string): string {
   return `${address.substring(0, 8)}…${address.substring(36)}`;
 }
 
+function formatNumber(value: number): string {
+  const valueFormat = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    currency: 'usd',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+  });
+  return valueFormat.format(value);
+}
+
+function formatValue(value: number): string {
+  const valueFormat = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    style: 'currency',
+    currency: 'usd',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 1,
+  });
+  return valueFormat.format(value);
+}
+
+function formatShare(value: number): string {
+  const valueFormat = new Intl.NumberFormat('en-US', {
+    style: 'percent',
+    minimumFractionDigits: 1,
+    maximumFractionDigits: 2,
+  });
+  return valueFormat.format(value);
+}
+
 function getDecimals(address: string): number {
   const map: Record<string, number> = {
     [USDC_TESTNET_ADDRESS]: 6,
@@ -29,4 +59,11 @@ function getDecimals(address: string): number {
   return map[address];
 }
 
-export { formatAddress, fromWei, toWei };
+export {
+  formatAddress,
+  formatNumber,
+  formatValue,
+  formatShare,
+  fromWei,
+  toWei,
+};
