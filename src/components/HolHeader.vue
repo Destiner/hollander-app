@@ -19,15 +19,22 @@ import { computed } from 'vue';
 import HolButton from './HolButton.vue';
 import WalletChip from './WalletChip.vue';
 
+import EthereumService from '@/services/ethereum';
 import { useWalletStore } from '@/stores';
+
+const service = new EthereumService();
 
 const store = useWalletStore();
 
 const address = computed(() => store.address);
 const isConnected = computed(() => store.isConnected);
 
-function connect(): void {
-  store.address = '0x72aa5ad78fb4f2e567a5df833dad12f60b52db63';
+async function connect(): Promise<void> {
+  const address = await service.connect();
+  if (!address) {
+    return;
+  }
+  store.address = address;
 }
 </script>
 
