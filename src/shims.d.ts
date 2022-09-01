@@ -8,3 +8,7 @@ declare module '*.vue' {
   const component: ComponentOptions;
   export default component;
 }
+
+interface Window {
+  ethereum: any;
+}
