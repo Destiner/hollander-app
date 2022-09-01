@@ -23,11 +23,13 @@
   },
   "dependencies": {
     "@ethersproject/bignumber": "^5.7.0",
+    "@ethersproject/contracts": "^5.7.0",
     "@ethersproject/providers": "^5.7.0",
     "@ethersproject/units": "^5.7.0",
     "@fontsource/nunito": "^4.5.10",
     "@headlessui/vue": "^1.6.7",
     "@metamask/jazzicon": "^2.0.0",
+    "abi-coder": "^4.0.0",
     "apexcharts": "^3.35.5",
     "pinia": "^2.0.21",
     "vue": "3.2.37",
