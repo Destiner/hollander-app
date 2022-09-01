@@ -30,6 +30,7 @@
           fromWei(auction.assetOut, auction.amountOutTotal)
         }}
         <HolAsset
+          size="s"
           show-icon
           show-symbol
           :address="auction.assetOut"
@@ -38,6 +39,7 @@
       <div class="param">
         Accumulated: {{ fromWei(auction.assetIn, auction.amountIn) }}
         <HolAsset
+          size="s"
           show-icon
           show-symbol
           :address="auction.assetIn"
@@ -46,6 +48,7 @@
       <div class="param">
         Price: {{ fromWei(auction.assetIn, auction.price) }}
         <HolAsset
+          size="s"
           show-icon
           show-symbol
           :address="auction.assetIn"

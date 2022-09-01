@@ -38,6 +38,7 @@
             <HolInput v-model="initialPrice">
               <div class="input-label">
                 <HolAsset
+                  size="s"
                   show-icon
                   show-symbol
                   :address="assetIn"

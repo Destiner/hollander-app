@@ -21,6 +21,7 @@
         Sell amount: {{ fromWei(assetOut, amountOut) }} /
         {{ fromWei(assetOut, amountOutTotal) }}
         <HolAsset
+          size="s"
           show-symbol
           :address="assetOut"
         />
@@ -28,6 +29,7 @@
       <div class="param">
         Accumulated: {{ fromWei(assetIn, amountIn) }}
         <HolAsset
+          size="s"
           show-symbol
           :address="assetIn"
         />
@@ -35,6 +37,7 @@
       <div class="param">
         Current price: {{ fromWei(assetIn, price) }}
         <HolAsset
+          size="s"
           show-symbol
           :address="assetIn"
         />
