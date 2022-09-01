@@ -27,6 +27,8 @@
 import HolAsset from './HolAsset.vue';
 import HolModal from './HolModal.vue';
 
+import { getAssets } from '@/utils/assets';
+
 withDefaults(
   defineProps<{
     isOpen: boolean;
@@ -41,7 +43,7 @@ const emit = defineEmits<{
   (e: 'select', address: string);
 }>();
 
-const items = ['0xa', '0xb', '0xc', '0xd'];
+const items = getAssets();
 
 function handleClose(): void {
   emit('close');

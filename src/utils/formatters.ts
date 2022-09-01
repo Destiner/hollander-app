@@ -1,9 +1,6 @@
 import { formatUnits, parseUnits } from '@ethersproject/units';
 
-const USDC_TESTNET_ADDRESS = '0xa';
-const DAI_TESTNET_ADDRESS = '0xb';
-const WETH_TESTNET_ADDRESS = '0xc';
-const UNI_TESTNET_ADDRESS = '0xd';
+import { getDecimals } from './assets';
 
 function toWei(address: string, amount: number): bigint {
   const decimals = getDecimals(address);
@@ -47,16 +44,6 @@ function formatShare(value: number): string {
     maximumFractionDigits: 2,
   });
   return valueFormat.format(value);
-}
-
-function getDecimals(address: string): number {
-  const map: Record<string, number> = {
-    [USDC_TESTNET_ADDRESS]: 6,
-    [DAI_TESTNET_ADDRESS]: 18,
-    [WETH_TESTNET_ADDRESS]: 18,
-    [UNI_TESTNET_ADDRESS]: 18,
-  };
-  return map[address];
 }
 
 export {

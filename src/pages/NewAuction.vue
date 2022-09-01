@@ -79,12 +79,13 @@ import AssetModal from '@/components/AssetModal.vue';
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
 import HolInput from '@/components/HolInput.vue';
+import { USDC_TESTNET_ADDRESS, WETH_TESTNET_ADDRESS } from '@/utils/assets';
 
 type PairAssetType = 'in' | 'out';
 
 const amount = ref('');
-const assetIn = ref('0xc');
-const assetOut = ref('0xa');
+const assetIn = ref(WETH_TESTNET_ADDRESS);
+const assetOut = ref(USDC_TESTNET_ADDRESS);
 const assetModalSelected = ref<PairAssetType | null>(null);
 
 const initialPrice = ref('');
