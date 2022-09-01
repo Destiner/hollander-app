@@ -46,7 +46,10 @@
         />
       </div>
       <div class="param">
-        Price: {{ fromWei(auction.assetIn, auction.price) }}
+        Price:
+        {{
+          auctionPriceFromWei(auction.assetOut, auction.assetIn, auction.price)
+        }}
         <HolAsset
           size="s"
           show-icon
@@ -73,7 +76,7 @@ import { ref } from 'vue';
 
 import HolAsset from '@/components/HolAsset.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
-import { fromWei } from '@/utils/formatters';
+import { auctionPriceFromWei, fromWei } from '@/utils/formatters';
 
 interface Auction {
   id: number;

@@ -87,7 +87,7 @@ import HollanderService from '@/services/hollander';
 import { useWalletStore } from '@/stores';
 import { USDC_TESTNET_ADDRESS, WETH_TESTNET_ADDRESS } from '@/utils/assets';
 import { hoursToBlocks } from '@/utils/converters';
-import { toWei } from '@/utils/formatters';
+import { auctionPriceToWei, toWei } from '@/utils/formatters';
 
 type PairAssetType = 'in' | 'out';
 
@@ -139,7 +139,11 @@ async function createAuction(): Promise<void> {
     swapPeriod.value,
   );
   const amountBase = toWei(assetOut.value, parseFloat(amount.value));
-  const price = toWei(assetIn.value, parseFloat(initialPrice.value));
+  const price = auctionPriceToWei(
+    assetOut.value,
+    assetIn.value,
+    parseFloat(initialPrice.value),
+  );
   const halvingPeriodBlocks = hoursToBlocks(parseFloat(halvingPeriod.value));
   const swapPeriodBlocks = hoursToBlocks(parseFloat(swapPeriod.value));
   console.log(
