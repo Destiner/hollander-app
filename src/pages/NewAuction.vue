@@ -6,17 +6,27 @@
         <h3>Order</h3>
         <HolInput v-model="amount">
           <div class="pair">
-            <HolAsset
-              show-icon
-              show-symbol
-              :address="assetOut"
-            />
+            <div
+              class="input-label asset-selector"
+              @click="openAssetModal('out')"
+            >
+              <HolAsset
+                show-icon
+                show-symbol
+                :address="assetOut"
+              />
+            </div>
             →
-            <HolAsset
-              show-icon
-              show-symbol
-              :address="assetIn"
-            />
+            <div
+              class="input-label asset-selector"
+              @click="openAssetModal('in')"
+            >
+              <HolAsset
+                show-icon
+                show-symbol
+                :address="assetIn"
+              />
+            </div>
           </div>
         </HolInput>
       </div>
@@ -26,20 +36,26 @@
           <div class="param">
             <span class="param-name">Initial price</span>
             <HolInput v-model="initialPrice">
-              <HolAsset
-                show-icon
-                show-symbol
-                :address="assetIn"
-              />
+              <div class="input-label">
+                <HolAsset
+                  show-icon
+                  show-symbol
+                  :address="assetIn"
+                />
+              </div>
             </HolInput>
           </div>
           <div class="param">
             <span class="param-name">Halving period</span>
-            <HolInput v-model="halvingPeriod"> hours </HolInput>
+            <HolInput v-model="halvingPeriod">
+              <div class="input-label">hours</div>
+            </HolInput>
           </div>
           <div class="param">
             <span class="param-name">Swap period</span>
-            <HolInput v-model="swapPeriod"> hours </HolInput>
+            <HolInput v-model="swapPeriod">
+              <div class="input-label">hours</div>
+            </HolInput>
           </div>
         </div>
       </div>
@@ -47,23 +63,51 @@
         <HolButton label="Create" />
       </div>
     </div>
+    <AssetModal
+      :is-open="isAssetModalOpen"
+      @close="handleCloseModal"
+      @select="handleAssetSelect($event)"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
 
+import AssetModal from '@/components/AssetModal.vue';
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
 import HolInput from '@/components/HolInput.vue';
 
+type PairAssetType = 'in' | 'out';
+
 const amount = ref('');
 const assetIn = ref('0xc');
 const assetOut = ref('0xa');
+const assetModalSelected = ref<PairAssetType | null>(null);
 
 const initialPrice = ref('');
 const halvingPeriod = ref('');
 const swapPeriod = ref('');
+
+const isAssetModalOpen = ref(false);
+
+function openAssetModal(type: PairAssetType): void {
+  isAssetModalOpen.value = true;
+  assetModalSelected.value = type;
+}
+
+function handleCloseModal(): void {
+  isAssetModalOpen.value = false;
+}
+
+function handleAssetSelect(address: string): void {
+  if (assetModalSelected.value === 'in') {
+    assetIn.value = address;
+  } else {
+    assetOut.value = address;
+  }
+}
 </script>
 
 <style scoped>
@@ -85,10 +129,24 @@ h3 {
   flex-direction: column;
 }
 
+.input-label {
+  padding: 4px;
+}
+
 .pair {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.asset-selector {
+  margin: 4px;
+}
+
+.asset-selector:hover {
+  border-radius: 8px;
+  background: #eee;
+  cursor: pointer;
 }
 
 .params {
