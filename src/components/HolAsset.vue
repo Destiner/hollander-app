@@ -1,5 +1,8 @@
 <template>
-  <div class="asset">
+  <div
+    class="asset"
+    :class="{ small: size === 's' }"
+  >
     <span
       v-if="showSymbol"
       class="symbol"
@@ -17,13 +20,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
+type Size = 's' | 'm';
+
 const props = withDefaults(
   defineProps<{
+    size: Size;
     address: string;
     showSymbol: boolean;
     showIcon: boolean;
   }>(),
   {
+    size: 'm',
     showSymbol: false,
     showIcon: false,
   },
@@ -71,10 +78,19 @@ const symbol = computed(() => {
   font-size: 20px;
 }
 
+.asset.small > .symbol {
+  font-size: 16px;
+}
+
 .icon {
   width: 24px;
   height: 24px;
   border: 2px solid var(--color-text);
   border-radius: 50%;
+}
+
+.asset.small > .icon {
+  width: 20px;
+  height: 20px;
 }
 </style>
