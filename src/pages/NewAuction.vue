@@ -61,7 +61,10 @@
         </div>
       </div>
       <div>
-        <HolButton label="Create" />
+        <HolButton
+          label="Create"
+          @click="createAuction"
+        />
       </div>
     </div>
     <AssetModal
@@ -73,15 +76,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 import AssetModal from '@/components/AssetModal.vue';
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
 import HolInput from '@/components/HolInput.vue';
+import HollanderService from '@/services/hollander';
+import { useWalletStore } from '@/stores';
 import { USDC_TESTNET_ADDRESS, WETH_TESTNET_ADDRESS } from '@/utils/assets';
+import { hoursToBlocks } from '@/utils/converters';
+import { toWei } from '@/utils/formatters';
 
 type PairAssetType = 'in' | 'out';
+
+const service = new HollanderService();
+
+const router = useRouter();
+const store = useWalletStore();
+
+const isConnected = computed(() => store.isConnected);
 
 const amount = ref('');
 const assetIn = ref(WETH_TESTNET_ADDRESS);
@@ -109,6 +124,50 @@ function handleAssetSelect(address: string): void {
   } else {
     assetOut.value = address;
   }
+}
+
+async function createAuction(): Promise<void> {
+  if (!isConnected.value) {
+    return;
+  }
+  await service.connect();
+  console.log(
+    'createAuction 1',
+    amount.value,
+    initialPrice.value,
+    halvingPeriod.value,
+    swapPeriod.value,
+  );
+  const amountBase = toWei(assetOut.value, parseFloat(amount.value));
+  const price = toWei(assetIn.value, parseFloat(initialPrice.value));
+  const halvingPeriodBlocks = hoursToBlocks(parseFloat(halvingPeriod.value));
+  const swapPeriodBlocks = hoursToBlocks(parseFloat(swapPeriod.value));
+  console.log(
+    'createAuction',
+    assetOut.value,
+    assetIn.value,
+    amountBase,
+    price,
+    halvingPeriodBlocks,
+    swapPeriodBlocks,
+  );
+  const auction = await service.createAuction(
+    assetOut.value,
+    assetIn.value,
+    amountBase,
+    price,
+    halvingPeriodBlocks,
+    swapPeriodBlocks,
+  );
+  if (!auction) {
+    return;
+  }
+  router.push({
+    name: 'auction',
+    params: {
+      address: auction,
+    },
+  });
 }
 </script>
 
