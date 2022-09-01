@@ -1,8 +1,8 @@
 <template>
   <span class="wrapper">
     <input
-      :model-value="modelValue"
-      @update:model-value="handleValueUpdate($event)"
+      :value="modelValue"
+      @input="handleInput"
     />
     <div class="label">
       <slot />
@@ -19,8 +19,9 @@ const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void;
 }>();
 
-function handleValueUpdate(newValue: string): void {
-  emit('update:modelValue', newValue);
+function handleInput(e: Event): void {
+  const value = (e.target as HTMLInputElement).value;
+  emit('update:modelValue', value);
 }
 </script>
 
