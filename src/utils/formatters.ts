@@ -1,6 +1,6 @@
 import { formatUnits, parseUnits } from '@ethersproject/units';
 
-import { getDecimals } from './assets';
+import { WETH_TESTNET_ADDRESS, getDecimals } from './assets';
 
 function toWei(address: string, amount: number): bigint {
   const decimals = getDecimals(address);
@@ -10,6 +10,32 @@ function toWei(address: string, amount: number): bigint {
 function fromWei(address: string, amount: bigint): number {
   const decimals = getDecimals(address);
   return parseFloat(formatUnits(amount, decimals));
+}
+
+// (USDC, WETH, 0.0005) -> 0.0005 * 10e18 * 10e18 / 10e6
+// (DAI, WETH, 0.0005) -> 0.0005 * 10e18
+// (WETH, USDC, 2000) -> 2000 * 10e6
+// (WETH, DAI, 2000) -> 2000 * 10e18
+function auctionPriceToWei(
+  assetBase: string,
+  assetQuote: string,
+  value: number,
+): bigint {
+  return toWei(
+    assetQuote,
+    fromWei(assetBase, toWei(WETH_TESTNET_ADDRESS, value)),
+  );
+}
+
+function auctionPriceFromWei(
+  assetBase: string,
+  assetQuote: string,
+  value: bigint,
+): number {
+  return fromWei(
+    assetQuote,
+    toWei(assetBase, fromWei(WETH_TESTNET_ADDRESS, value)),
+  );
 }
 
 function formatAddress(address: string): string {
@@ -47,6 +73,8 @@ function formatShare(value: number): string {
 }
 
 export {
+  auctionPriceToWei,
+  auctionPriceFromWei,
   formatAddress,
   formatNumber,
   formatValue,
