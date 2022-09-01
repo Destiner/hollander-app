@@ -131,13 +131,6 @@ async function createAuction(): Promise<void> {
     return;
   }
   await service.connect();
-  console.log(
-    'createAuction 1',
-    amount.value,
-    initialPrice.value,
-    halvingPeriod.value,
-    swapPeriod.value,
-  );
   const amountBase = toWei(assetOut.value, parseFloat(amount.value));
   const price = auctionPriceToWei(
     assetOut.value,
@@ -146,15 +139,6 @@ async function createAuction(): Promise<void> {
   );
   const halvingPeriodBlocks = hoursToBlocks(parseFloat(halvingPeriod.value));
   const swapPeriodBlocks = hoursToBlocks(parseFloat(swapPeriod.value));
-  console.log(
-    'createAuction',
-    assetOut.value,
-    assetIn.value,
-    amountBase,
-    price,
-    halvingPeriodBlocks,
-    swapPeriodBlocks,
-  );
   const auction = await service.createAuction(
     assetOut.value,
     assetIn.value,
