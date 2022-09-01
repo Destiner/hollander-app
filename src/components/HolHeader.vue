@@ -1,29 +1,33 @@
 <template>
   <header>
     <router-link :to="{ name: 'home' }">Hollander</router-link>
-    <HolButton
+    <WalletChip
       v-if="isConnected"
+      :address="address"
+    />
+    <HolButton
+      v-else
       label="Connect"
       @click="connect"
-    />
-    <WalletChip
-      v-else
-      :address="address"
     />
   </header>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import HolButton from './HolButton.vue';
 import WalletChip from './WalletChip.vue';
 
-const address = ref('');
-const isConnected = computed(() => !address.value);
+import { useWalletStore } from '@/stores';
+
+const store = useWalletStore();
+
+const address = computed(() => store.address);
+const isConnected = computed(() => store.isConnected);
 
 function connect(): void {
-  address.value = '0x72aa5ad78fb4f2e567a5df833dad12f60b52db63';
+  store.address = '0x72aa5ad78fb4f2e567a5df833dad12f60b52db63';
 }
 </script>
 

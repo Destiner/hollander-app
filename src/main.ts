@@ -1,3 +1,4 @@
+import { createPinia } from 'pinia';
 import { createApp } from 'vue';
 import { createWebHistory, createRouter } from 'vue-router';
 
@@ -16,9 +17,12 @@ const router = createRouter({
   ],
 });
 
+const pinia = createPinia();
+
 const app = createApp(App);
 
 app.use(router);
+app.use(pinia);
 
 app.mount('#app');
 

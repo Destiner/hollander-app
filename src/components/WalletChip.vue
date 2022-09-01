@@ -5,6 +5,10 @@
       class="icon"
     />
     {{ formatAddress(address) }}
+    <IconCross
+      class="button"
+      @click="disconnect"
+    />
   </div>
 </template>
 
@@ -12,6 +16,8 @@
 import jazzicon from '@metamask/jazzicon';
 import { ref, onMounted, watch } from 'vue';
 
+import IconCross from '@/components/icons/Cross.vue';
+import { useWalletStore } from '@/stores';
 import { formatAddress } from '@/utils/formatters';
 
 const props = defineProps<{
@@ -19,6 +25,8 @@ const props = defineProps<{
 }>();
 
 const icon = ref<HTMLElement | null>(null);
+
+const store = useWalletStore();
 
 onMounted(() => {
   update();
@@ -36,6 +44,10 @@ function update(): void {
   icon.value.innerHTML = '';
   icon.value.appendChild(jazzicon(20, parseInt(address.slice(2, 10), 16)));
 }
+
+function disconnect(): void {
+  store.disconnect();
+}
 </script>
 
 <style scoped>
@@ -51,5 +63,9 @@ function update(): void {
 
 .icon {
   height: 20px;
+}
+
+.button {
+  cursor: pointer;
 }
 </style>
