@@ -24,6 +24,7 @@
   "dependencies": {
     "@ethersproject/units": "^5.7.0",
     "@fontsource/nunito": "^4.5.10",
+    "@headlessui/vue": "^1.6.7",
     "@metamask/jazzicon": "^2.0.0",
     "apexcharts": "^3.35.5",
     "vue": "3.2.37",
