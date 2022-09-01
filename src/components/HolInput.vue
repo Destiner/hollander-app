@@ -44,7 +44,6 @@ input {
 }
 
 .label {
-  padding: 4px;
   border-left: 1px solid var(--color-text);
   border-radius: 0 8px 8px 0;
   background: #fafafa;
