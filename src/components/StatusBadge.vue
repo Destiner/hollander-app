@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-type AuctionStatus = 'draft' | 'active' | 'complete';
+import { AuctionStatus, getStatus } from '@/utils/auction';
 
 const props = defineProps<{
   blockStart: number;
@@ -24,15 +24,9 @@ const props = defineProps<{
   amountOutTotal: bigint;
 }>();
 
-const status = computed<AuctionStatus>(() => {
-  if (props.blockStart === 0) {
-    return 'draft';
-  }
-  if (props.amountOut === props.amountOutTotal) {
-    return 'complete';
-  }
-  return 'active';
-});
+const status = computed<AuctionStatus>(() =>
+  getStatus(props.blockStart, props.amountOut, props.amountOutTotal),
+);
 
 // eslint-disable-next-line vue/return-in-computed-property
 const label = computed(() => {
