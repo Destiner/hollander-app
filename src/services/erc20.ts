@@ -19,6 +19,14 @@ class Erc20Service extends EthereumService {
     return await contract.allowance(owner, spender);
   }
 
+  async balanceOf(asset: string, owner: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(asset, erc20Abi, this.provider);
+    return await contract.balanceOf(owner);
+  }
+
   async approve(asset: string, spender: string): Promise<void> {
     const signer = this.provider?.getSigner();
     if (!signer) {
