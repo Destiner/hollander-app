@@ -58,9 +58,11 @@
         />
       </div>
       <div class="param">
-        Halving period: {{ auction.halvingPeriod }} blocks
+        Halving period: {{ blocksToHours(auction.halvingPeriod) }} hours
       </div>
-      <div class="param">Swap period: {{ auction.swapPeriod }} blocks</div>
+      <div class="param">
+        Swap period: {{ blocksToHours(auction.swapPeriod) }} hours
+      </div>
     </div>
     <div class="button">
       <div v-if="status === 'draft' && enoughBalance">
@@ -96,6 +98,7 @@ import Erc20Service from '@/services/erc20';
 import HollanderService from '@/services/hollander';
 import { useAssetStore, useWalletStore } from '@/stores';
 import { AuctionStatus, getStatus } from '@/utils/auction';
+import { blocksToHours } from '@/utils/converters';
 import { auctionPriceFromWei, fromWei } from '@/utils/formatters';
 
 interface Auction {
