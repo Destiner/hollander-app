@@ -223,11 +223,12 @@ async function fetchAsset(asset: string, auction: string): Promise<void> {
   await erc20Service.connect();
   const allowance = await erc20Service.allowance(asset, address, auction);
   const balance = await erc20Service.balanceOf(asset, address);
-  if (!allowance || !balance) {
-    return;
+  if (allowance !== null) {
+    assetStore.setAllowance(asset, address, auction, allowance);
   }
-  assetStore.setAllowance(asset, address, auction, allowance);
-  assetStore.setBalance(asset, address, balance);
+  if (balance !== null) {
+    assetStore.setBalance(asset, address, balance);
+  }
 }
 
 const enoughBalance = computed<boolean>(() => {
@@ -260,7 +261,11 @@ async function init(): Promise<void> {
     return;
   }
   await hollanderService.connect();
-  await hollanderService.init(auction.value.address);
+  const blockStart = await hollanderService.init(auction.value.address);
+  if (blockStart === null) {
+    return;
+  }
+  auction.value.blockStart = parseInt(blockStart.toString());
 }
 
 async function approve(): Promise<void> {
@@ -272,6 +277,19 @@ async function approve(): Promise<void> {
   }
   await erc20Service.connect();
   await erc20Service.approve(auction.value.assetOut, auction.value.address);
+  const allowance = await erc20Service.allowance(
+    auction.value.assetOut,
+    walletStore.address,
+    auction.value.address,
+  );
+  if (allowance !== null) {
+    assetStore.setAllowance(
+      auction.value.assetOut,
+      walletStore.address,
+      auction.value.address,
+      allowance,
+    );
+  }
 }
 </script>
 

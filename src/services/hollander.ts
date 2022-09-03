@@ -42,14 +42,21 @@ class HollanderService extends EthereumService {
     return event.values.address as string;
   }
 
-  async init(auction: string): Promise<void> {
+  async init(auction: string): Promise<bigint | null> {
     const signer = this.provider?.getSigner();
     if (!signer) {
-      return;
+      return null;
     }
     const contract = new Contract(auction, auctionAbi, signer);
     const tx: TransactionResponse = await contract.init();
-    await tx.wait();
+    const receipt = await tx.wait();
+    const log = receipt.logs[1];
+    const coder = new Coder(factoryAbi);
+    const event = coder.decodeEvent(log.topics, log.data);
+    if (event.name !== 'Init') {
+      return null;
+    }
+    return event.values.blockStart as bigint;
   }
 
   async buy(auction: string, amountBuy: bigint): Promise<void> {
