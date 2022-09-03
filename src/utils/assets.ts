@@ -1,9 +1,9 @@
-const USDC_TESTNET_ADDRESS = '0x302075a4F924Baa2F1cdAADedf42A62cc69F5205';
-const DAI_TESTNET_ADDRESS = '0xd6e44BCb6902C66C16f388Cae6C48Dd65BBcdB53';
-const WETH_TESTNET_ADDRESS = '0xeDf20323fd5Ee2d98EE74E87304644D439B8C367';
-const UNI_TESTNET_ADDRESS = '0xD6F5dE9a631036215348a1EFcf88B3AD2b9D4Ecf';
-const BAL_TESTNET_ADDRESS = '0x26C21Aa2d6cFc72Bc7Fa281A67A485ce5da17dd3';
-const MKR_TESTNET_ADDRESS = '0xA3075ADaA905Ae900Cc43a111b1AdDb97Ad2b75c';
+const USDC_TESTNET_ADDRESS = '0x302075a4f924baa2f1cdaadedf42a62cc69f5205';
+const DAI_TESTNET_ADDRESS = '0xd6e44bcb6902c66c16f388cae6c48dd65bbcdb53';
+const WETH_TESTNET_ADDRESS = '0xedf20323fd5ee2d98ee74e87304644d439b8c367';
+const UNI_TESTNET_ADDRESS = '0xd6f5de9a631036215348a1efcf88b3ad2b9d4ecf';
+const BAL_TESTNET_ADDRESS = '0x26c21aa2d6cfc72bc7fa281a67a485ce5da17dd3';
+const MKR_TESTNET_ADDRESS = '0xa3075adaa905ae900cc43a111b1addb97ad2b75c';
 
 const USDC_ADDRESS = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
 const DAI_ADDRESS = '0x6B175474E89094C44Da98b954EedeAC495271d0F';
@@ -32,7 +32,7 @@ function getDecimals(address: string): number {
     [BAL_TESTNET_ADDRESS]: 18,
     [MKR_TESTNET_ADDRESS]: 18,
   };
-  return map[address];
+  return map[address.toLowerCase()];
 }
 
 function getIconUrl(testnetAddress: string): string {
@@ -44,7 +44,7 @@ function getIconUrl(testnetAddress: string): string {
     [BAL_TESTNET_ADDRESS]: BAL_ADDRESS,
     [MKR_TESTNET_ADDRESS]: MKR_ADDRESS,
   };
-  const address = addressMap[testnetAddress];
+  const address = addressMap[testnetAddress.toLowerCase()];
   return `https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/${address}/logo.png`;
 }
 
@@ -57,7 +57,7 @@ function getSymbol(testnetAddress: string): string {
     [BAL_TESTNET_ADDRESS]: 'BAL',
     [MKR_TESTNET_ADDRESS]: 'MKR',
   };
-  return map[testnetAddress];
+  return map[testnetAddress.toLowerCase()];
 }
 
 export {
