@@ -69,13 +69,13 @@ class HollanderService extends EthereumService {
     await tx.wait();
   }
 
-  async withdraw(auction: string, amount: bigint): Promise<void> {
+  async withdraw(auction: string): Promise<void> {
     const signer = this.provider?.getSigner();
     if (!signer) {
       return;
     }
     const contract = new Contract(auction, auctionAbi, signer);
-    const tx: TransactionResponse = await contract.withdraw(amount);
+    const tx: TransactionResponse = await contract.withdraw();
     await tx.wait();
   }
 
