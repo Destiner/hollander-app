@@ -34,14 +34,6 @@
           :address="assetIn"
         />
       </div>
-      <div class="param">
-        Current price: {{ fromWei(assetIn, price) }}
-        <HolAsset
-          size="s"
-          show-symbol
-          :address="assetIn"
-        />
-      </div>
     </div>
   </HolCard>
 </template>
@@ -63,7 +55,6 @@ const props = defineProps<{
   amountIn: bigint;
   amountOut: bigint;
   amountOutTotal: bigint;
-  price: bigint;
 }>();
 
 function openAuction(): void {
