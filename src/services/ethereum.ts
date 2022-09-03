@@ -5,7 +5,7 @@ import {
   TransactionReceipt,
 } from '@ethersproject/providers';
 
-const CHAIN_ID = 1;
+const CHAIN_ID = 5;
 
 class EthereumService {
   address: string | null;
