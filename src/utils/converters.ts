@@ -2,7 +2,7 @@ const HOUR = 60 * 60;
 const BLOCK_TIME = 14;
 
 function blocksToHours(blocks: number): number {
-  return Math.floor((blocks * BLOCK_TIME) / HOUR);
+  return parseFloat(((blocks * BLOCK_TIME) / HOUR).toFixed(2));
 }
 
 function hoursToBlocks(hours: number): number {
