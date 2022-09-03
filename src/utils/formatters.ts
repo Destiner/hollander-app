@@ -1,15 +1,15 @@
+import { formatUnits, parseUnits } from '@ethersproject/units';
+
 import { WETH_TESTNET_ADDRESS, getDecimals } from './assets';
 
 function toWei(address: string, amount: number): bigint {
   const decimals = getDecimals(address);
-  const multiplier = 10n ** BigInt(decimals);
-  return BigInt(amount.toFixed(0)) * multiplier;
+  return parseUnits(amount.toFixed(decimals), decimals).toBigInt();
 }
 
 function fromWei(address: string, amount: bigint): number {
   const decimals = getDecimals(address);
-  const multiplier = 10 ** decimals;
-  return parseFloat(amount.toString()) / multiplier;
+  return parseFloat(formatUnits(amount, decimals));
 }
 
 // (USDC, WETH, 0.0005) -> 0.0005 * 10e18 * 10e18 / 10e6
