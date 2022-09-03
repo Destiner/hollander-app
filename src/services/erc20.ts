@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import { MaxUint256 } from '@ethersproject/constants';
 import { Contract } from '@ethersproject/contracts';
 import { TransactionResponse } from '@ethersproject/providers';
@@ -16,7 +17,7 @@ class Erc20Service extends EthereumService {
       return null;
     }
     const contract = new Contract(asset, erc20Abi, this.provider);
-    return await contract.allowance(owner, spender);
+    return ((await contract.allowance(owner, spender)) as BigNumber).toBigInt();
   }
 
   async balanceOf(asset: string, owner: string): Promise<bigint | null> {
@@ -24,7 +25,7 @@ class Erc20Service extends EthereumService {
       return null;
     }
     const contract = new Contract(asset, erc20Abi, this.provider);
-    return await contract.balanceOf(owner);
+    return ((await contract.balanceOf(owner)) as BigNumber).toBigInt();
   }
 
   async approve(asset: string, spender: string): Promise<void> {
