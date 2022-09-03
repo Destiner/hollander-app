@@ -4,7 +4,7 @@
     class="page"
   >
     <h2 class="title">
-      <span>Auction #{{ auction.id }}</span>
+      <span>Auction</span>
       <StatusBadge
         :block-start="auction.blockStart"
         :amount-out="auction.amountOut"
@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
 
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
@@ -98,7 +99,7 @@ import { AuctionStatus, getStatus } from '@/utils/auction';
 import { auctionPriceFromWei, fromWei } from '@/utils/formatters';
 
 interface Auction {
-  id: number;
+  owner: string;
   address: string;
   assetIn: string;
   assetOut: string;
@@ -111,13 +112,21 @@ interface Auction {
   blockStart: number;
 }
 
+const route = useRoute();
+
 const erc20Service = new Erc20Service();
 const hollanderService = new HollanderService();
 
 const assetStore = useAssetStore();
 const walletStore = useWalletStore();
 
-onMounted(() => {
+const address = computed(() => route.params.address as string);
+
+onMounted(async () => {
+  if (!address.value) {
+    return;
+  }
+  auction.value = await fetchAuction(address.value);
   if (!auction.value) {
     return;
   }
@@ -137,19 +146,7 @@ watch(
   },
 );
 
-const auction = ref<Auction | null>({
-  id: 3819,
-  address: '0x1',
-  assetIn: '0xc',
-  assetOut: '0xa',
-  amountIn: 1800000000000000000n,
-  amountOut: 8000000000n,
-  amountOutTotal: 10000000000n,
-  price: 1500000000000000n,
-  halvingPeriod: 400,
-  swapPeriod: 800,
-  blockStart: 15000000,
-});
+const auction = ref<Auction | null>(null);
 
 const status = computed<AuctionStatus | null>(() =>
   auction.value
@@ -160,6 +157,63 @@ const status = computed<AuctionStatus | null>(() =>
       )
     : null,
 );
+
+async function fetchAuction(auction: string): Promise<Auction | null> {
+  await hollanderService.connect();
+  const owner = await hollanderService.owner(auction);
+  const blockStart = await hollanderService.blockStart(auction);
+  const tokenBase = await hollanderService.tokenBase(auction);
+  const tokenQuote = await hollanderService.tokenQuote(auction);
+  const amountBaseTotal = await hollanderService.amountBase(auction);
+  const initialPrice = await hollanderService.initialPrice(auction);
+  const halvingPeriod = await hollanderService.halvingPeriod(auction);
+  const swapPeriod = await hollanderService.swapPeriod(auction);
+
+  if (
+    !owner ||
+    blockStart === null ||
+    !tokenBase ||
+    !tokenQuote ||
+    !amountBaseTotal ||
+    !initialPrice ||
+    !halvingPeriod ||
+    !swapPeriod
+  ) {
+    return null;
+  }
+
+  await erc20Service.connect();
+  const amountQuote = await erc20Service.balanceOf(tokenQuote, auction);
+  const amountBase = await erc20Service.balanceOf(tokenBase, auction);
+
+  if (amountQuote === null || amountBase === null) {
+    return null;
+  }
+
+  const price =
+    getStatus(parseInt(blockStart.toString()), amountBase, amountBaseTotal) !==
+    'draft'
+      ? await hollanderService.getPrice(auction, 0n)
+      : initialPrice;
+
+  if (!price) {
+    return null;
+  }
+
+  return {
+    owner,
+    address: auction,
+    assetIn: tokenQuote,
+    assetOut: tokenBase,
+    amountIn: amountQuote,
+    amountOut: amountBase,
+    amountOutTotal: amountBaseTotal,
+    price,
+    halvingPeriod: parseInt(halvingPeriod.toString()),
+    swapPeriod: parseInt(swapPeriod.toString()),
+    blockStart: parseInt(blockStart.toString()),
+  };
+}
 
 async function fetchAsset(asset: string, auction: string): Promise<void> {
   if (!walletStore.isConnected) {
