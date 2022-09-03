@@ -1,14 +1,10 @@
 type AuctionStatus = 'draft' | 'active' | 'complete';
 
-function getStatus(
-  blockStart: number,
-  amountOut: bigint,
-  amountOutTotal: bigint,
-): AuctionStatus {
+function getStatus(blockStart: number, amountOut: bigint): AuctionStatus {
   if (blockStart === 0) {
     return 'draft';
   }
-  if (amountOut === amountOutTotal) {
+  if (amountOut === 0n) {
     return 'complete';
   }
   return 'active';

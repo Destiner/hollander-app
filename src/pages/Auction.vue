@@ -150,11 +150,7 @@ const auction = ref<Auction | null>(null);
 
 const status = computed<AuctionStatus | null>(() =>
   auction.value
-    ? getStatus(
-        auction.value.blockStart,
-        auction.value.amountOut,
-        auction.value.amountOutTotal,
-      )
+    ? getStatus(auction.value.blockStart, auction.value.amountOut)
     : null,
 );
 
@@ -191,8 +187,7 @@ async function fetchAuction(auction: string): Promise<Auction | null> {
   }
 
   const price =
-    getStatus(parseInt(blockStart.toString()), amountBase, amountBaseTotal) !==
-    'draft'
+    getStatus(parseInt(blockStart.toString()), amountBase) !== 'draft'
       ? await hollanderService.getPrice(auction, 0n)
       : initialPrice;
 

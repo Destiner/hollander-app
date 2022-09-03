@@ -21,11 +21,10 @@ import { AuctionStatus, getStatus } from '@/utils/auction';
 const props = defineProps<{
   blockStart: number;
   amountOut: bigint;
-  amountOutTotal: bigint;
 }>();
 
 const status = computed<AuctionStatus>(() =>
-  getStatus(props.blockStart, props.amountOut, props.amountOutTotal),
+  getStatus(props.blockStart, props.amountOut),
 );
 
 // eslint-disable-next-line vue/return-in-computed-property
