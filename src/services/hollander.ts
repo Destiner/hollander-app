@@ -32,7 +32,7 @@ class HollanderService extends EthereumService {
       halvingPeriod,
       swapPeriod,
     );
-    const receipt = await tx.wait();
+    const receipt = await tx.wait(2);
     const log = receipt.logs[0];
     const coder = new Coder(factoryAbi);
     const event = coder.decodeEvent(log.topics, log.data);
