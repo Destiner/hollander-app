@@ -7,7 +7,7 @@ import EthereumService from './ethereum';
 import auctionAbi from '@/abi/auction.json';
 import factoryAbi from '@/abi/factory.json';
 
-const FACTORY_ADDRESS = '0x613603a1158A7f31bb73309F89745cd096a3938f';
+const FACTORY_ADDRESS = '0x26704df470f36A45592EcC07E9CAcC7aB795A094';
 
 class HollanderService extends EthereumService {
   async createAuction(
