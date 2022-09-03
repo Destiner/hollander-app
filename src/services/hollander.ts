@@ -1,3 +1,4 @@
+import { BigNumber } from '@ethersproject/bignumber';
 import { Contract } from '@ethersproject/contracts';
 import { TransactionResponse } from '@ethersproject/providers';
 import { Coder } from 'abi-coder';
@@ -69,6 +70,78 @@ class HollanderService extends EthereumService {
     const contract = new Contract(auction, auctionAbi, signer);
     const tx: TransactionResponse = await contract.withdraw(amount);
     await tx.wait();
+  }
+
+  async owner(auction: string): Promise<string | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return await contract.owner();
+  }
+
+  async blockStart(auction: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.blockStart()) as BigNumber).toBigInt();
+  }
+
+  async tokenBase(auction: string): Promise<string | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return await contract.tokenBase();
+  }
+
+  async tokenQuote(auction: string): Promise<string | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return await contract.tokenQuote();
+  }
+
+  async amountBase(auction: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.amountBase()) as BigNumber).toBigInt();
+  }
+
+  async initialPrice(auction: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.initialPrice()) as BigNumber).toBigInt();
+  }
+
+  async halvingPeriod(auction: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.halvingPeriod()) as BigNumber).toBigInt();
+  }
+
+  async swapPeriod(auction: string): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.swapPeriod()) as BigNumber).toBigInt();
+  }
+
+  async getPrice(auction: string, amount: bigint): Promise<bigint | null> {
+    if (!this.provider) {
+      return null;
+    }
+    const contract = new Contract(auction, auctionAbi, this.provider);
+    return ((await contract.getPrice(amount)) as BigNumber).toBigInt();
   }
 }
 
