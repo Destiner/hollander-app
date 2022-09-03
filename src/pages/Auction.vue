@@ -77,6 +77,12 @@
           @click="approve"
         />
       </div>
+      <div v-if="status === 'complete' && auction.amountIn > 0n">
+        <HolButton
+          label="Withdraw"
+          @click="withdraw"
+        />
+      </div>
     </div>
   </div>
   <div
@@ -288,6 +294,18 @@ async function approve(): Promise<void> {
       allowance,
     );
   }
+}
+
+async function withdraw(): Promise<void> {
+  if (!walletStore.isConnected) {
+    return;
+  }
+  if (!auction.value) {
+    return;
+  }
+  await hollanderService.connect();
+  await hollanderService.withdraw(auction.value.address);
+  auction.value.amountIn = 0n;
 }
 </script>
 
