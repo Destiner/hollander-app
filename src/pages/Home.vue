@@ -3,7 +3,7 @@
     <div class="hero">
       <div class="hero-text">
         <div>Swap large amounts of tokens.</div>
-        <div>No MEV, low slippage.</div>
+        <div>No MEV, low price impact.</div>
       </div>
       <div>
         <HolButton
