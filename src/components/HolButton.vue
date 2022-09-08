@@ -1,11 +1,17 @@
 <template>
-  <button>{{ label }}</button>
+  <button :disabled="isLoading">{{ label }}</button>
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  label: string;
-}>();
+withDefaults(
+  defineProps<{
+    label: string;
+    isLoading: boolean;
+  }>(),
+  {
+    isLoading: false,
+  },
+);
 </script>
 
 <style scoped>
@@ -22,5 +28,10 @@ button {
 button:hover {
   background: var(--color-accent-lighter);
   cursor: pointer;
+}
+
+button:disabled {
+  background: var(--color-accent-lighter);
+  pointer-events: none;
 }
 </style>
