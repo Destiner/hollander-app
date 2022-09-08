@@ -164,7 +164,6 @@ const status = computed<AuctionStatus | null>(() =>
 );
 
 async function fetchAuction(auction: string): Promise<Auction | null> {
-  await hollanderService.connect();
   const owner = await hollanderService.owner(auction);
   const blockStart = await hollanderService.blockStart(auction);
   const tokenBase = await hollanderService.tokenBase(auction);
@@ -187,7 +186,6 @@ async function fetchAuction(auction: string): Promise<Auction | null> {
     return null;
   }
 
-  await erc20Service.connect();
   const amountQuote = await erc20Service.balanceOf(tokenQuote, auction);
   const amountBase = await erc20Service.balanceOf(tokenBase, auction);
 
