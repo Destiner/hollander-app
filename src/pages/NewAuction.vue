@@ -63,6 +63,7 @@
       <div>
         <HolButton
           label="Create"
+          :is-loading="hasPendingTx"
           @click="createAuction"
         />
       </div>
@@ -126,6 +127,8 @@ function handleAssetSelect(address: string): void {
   }
 }
 
+const hasPendingTx = ref(false);
+
 async function createAuction(): Promise<void> {
   if (!isConnected.value) {
     return;
@@ -139,6 +142,7 @@ async function createAuction(): Promise<void> {
   );
   const halvingPeriodBlocks = hoursToBlocks(parseFloat(halvingPeriod.value));
   const swapPeriodBlocks = hoursToBlocks(parseFloat(swapPeriod.value));
+  hasPendingTx.value = true;
   const auction = await service.createAuction(
     assetOut.value,
     assetIn.value,
@@ -147,6 +151,7 @@ async function createAuction(): Promise<void> {
     halvingPeriodBlocks,
     swapPeriodBlocks,
   );
+  hasPendingTx.value = false;
   if (!auction) {
     return;
   }

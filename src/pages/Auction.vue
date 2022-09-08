@@ -69,17 +69,20 @@
         <HolButton
           v-if="enoughAllowance"
           label="Init"
+          :is-loading="hasPendingTx"
           @click="init"
         />
         <HolButton
           v-else
           label="Approve"
+          :is-loading="hasPendingTx"
           @click="approve"
         />
       </div>
       <div v-if="status === 'complete' && auction.amountIn > 0n">
         <HolButton
           label="Withdraw"
+          :is-loading="hasPendingTx"
           @click="withdraw"
         />
       </div>
@@ -255,6 +258,8 @@ const enoughAllowance = computed<boolean>(() => {
   return allowance >= auction.value.amountOutTotal;
 });
 
+const hasPendingTx = ref(false);
+
 async function init(): Promise<void> {
   if (!walletStore.isConnected) {
     return;
@@ -263,7 +268,9 @@ async function init(): Promise<void> {
     return;
   }
   await hollanderService.connect();
+  hasPendingTx.value = true;
   const blockStart = await hollanderService.init(auction.value.address);
+  hasPendingTx.value = false;
   if (blockStart === null) {
     return;
   }
@@ -278,12 +285,14 @@ async function approve(): Promise<void> {
     return;
   }
   await erc20Service.connect();
+  hasPendingTx.value = true;
   await erc20Service.approve(auction.value.assetOut, auction.value.address);
   const allowance = await erc20Service.allowance(
     auction.value.assetOut,
     walletStore.address,
     auction.value.address,
   );
+  hasPendingTx.value = false;
   if (allowance !== null) {
     assetStore.setAllowance(
       auction.value.assetOut,
@@ -302,7 +311,9 @@ async function withdraw(): Promise<void> {
     return;
   }
   await hollanderService.connect();
+  hasPendingTx.value = true;
   await hollanderService.withdraw(auction.value.address);
+  hasPendingTx.value = false;
   auction.value.amountIn = 0n;
 }
 </script>
