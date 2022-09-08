@@ -39,8 +39,8 @@ withDefaults(
 );
 
 const emit = defineEmits<{
-  (e: 'close');
-  (e: 'select', address: string);
+  (e: 'close'): void;
+  (e: 'select', address: string): void;
 }>();
 
 const items = getAssets();
