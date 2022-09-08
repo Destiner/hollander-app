@@ -3,17 +3,26 @@ import {
   Web3Provider,
   ExternalProvider,
   TransactionReceipt,
+  Provider,
+  JsonRpcSigner,
+  AlchemyProvider,
 } from '@ethersproject/providers';
+
+import useEnv from '@/composables/useEnv';
+
+const { alchemyKey } = useEnv();
 
 const CHAIN_ID = 5;
 
 class EthereumService {
   address: string | null;
-  provider: Web3Provider | null;
+  signer: JsonRpcSigner | null;
+  provider: Provider | null;
 
   constructor() {
     this.address = null;
     this.provider = getProvider();
+    this.signer = getSigner();
   }
 
   async connect(): Promise<string | null> {
@@ -43,10 +52,10 @@ class EthereumService {
     data: string,
     value: BigNumber,
   ): Promise<TransactionReceipt | null> {
-    if (!this.provider) {
+    if (!this.signer) {
       return null;
     }
-    const tx = await this.provider.getSigner().sendTransaction({
+    const tx = await this.signer.sendTransaction({
       to,
       gasLimit,
       gasPrice,
@@ -57,11 +66,16 @@ class EthereumService {
   }
 }
 
-function getProvider(): Web3Provider | null {
+function getProvider(): Provider {
+  return new AlchemyProvider(CHAIN_ID, alchemyKey);
+}
+
+function getSigner(): JsonRpcSigner | null {
   if (!window.ethereum) {
     return null;
   }
-  return new Web3Provider(window.ethereum, CHAIN_ID);
+  const signingProvider = new Web3Provider(window.ethereum, CHAIN_ID);
+  return signingProvider.getSigner();
 }
 
 export default EthereumService;

@@ -29,11 +29,10 @@ class Erc20Service extends EthereumService {
   }
 
   async approve(asset: string, spender: string): Promise<void> {
-    const signer = this.provider?.getSigner();
-    if (!signer) {
+    if (!this.signer) {
       return;
     }
-    const contract = new Contract(asset, erc20Abi, signer);
+    const contract = new Contract(asset, erc20Abi, this.signer);
     const tx: TransactionResponse = await contract.approve(spender, MaxUint256);
     await tx.wait();
   }

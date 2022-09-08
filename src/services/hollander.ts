@@ -19,11 +19,10 @@ class HollanderService extends EthereumService {
     halvingPeriod: number,
     swapPeriod: number,
   ): Promise<string | null> {
-    const signer = this.provider?.getSigner();
-    if (!signer) {
+    if (!this.signer) {
       return null;
     }
-    const contract = new Contract(FACTORY_ADDRESS, factoryAbi, signer);
+    const contract = new Contract(FACTORY_ADDRESS, factoryAbi, this.signer);
     const tx: TransactionResponse = await contract.createAuction(
       tokenBase,
       tokenQuote,
@@ -43,11 +42,10 @@ class HollanderService extends EthereumService {
   }
 
   async init(auction: string): Promise<bigint | null> {
-    const signer = this.provider?.getSigner();
-    if (!signer) {
+    if (!this.signer) {
       return null;
     }
-    const contract = new Contract(auction, auctionAbi, signer);
+    const contract = new Contract(auction, auctionAbi, this.signer);
     const tx: TransactionResponse = await contract.init();
     const receipt = await tx.wait();
     const log = receipt.logs[1];
@@ -60,21 +58,19 @@ class HollanderService extends EthereumService {
   }
 
   async buy(auction: string, amountBuy: bigint): Promise<void> {
-    const signer = this.provider?.getSigner();
-    if (!signer) {
+    if (!this.signer) {
       return;
     }
-    const contract = new Contract(auction, auctionAbi, signer);
+    const contract = new Contract(auction, auctionAbi, this.signer);
     const tx: TransactionResponse = await contract.buy(amountBuy);
     await tx.wait();
   }
 
   async withdraw(auction: string): Promise<void> {
-    const signer = this.provider?.getSigner();
-    if (!signer) {
+    if (!this.signer) {
       return;
     }
-    const contract = new Contract(auction, auctionAbi, signer);
+    const contract = new Contract(auction, auctionAbi, this.signer);
     const tx: TransactionResponse = await contract.withdraw();
     await tx.wait();
   }
