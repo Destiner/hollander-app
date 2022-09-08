@@ -38,7 +38,7 @@ class HollanderService extends EthereumService {
     if (event.name !== 'NewAuction') {
       return null;
     }
-    return event.values.address as string;
+    return event.values.auction as string;
   }
 
   async init(auction: string): Promise<bigint | null> {
@@ -49,7 +49,7 @@ class HollanderService extends EthereumService {
     const tx: TransactionResponse = await contract.init();
     const receipt = await tx.wait();
     const log = receipt.logs[1];
-    const coder = new Coder(factoryAbi);
+    const coder = new Coder(auctionAbi);
     const event = coder.decodeEvent(log.topics, log.data);
     if (event.name !== 'Init') {
       return null;
