@@ -339,6 +339,7 @@ interface Auction {
   blockStart: number;
 }
 
+// eslint-disable-next-line import/prefer-default-export
 export { Auction };
 </script>
 
