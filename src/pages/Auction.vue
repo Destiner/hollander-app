@@ -65,7 +65,7 @@
       </div>
     </div>
     <div class="button">
-      <div v-if="status === 'draft' && enoughBalance">
+      <div v-if="status === 'draft' && isOwner && enoughBalance">
         <HolButton
           v-if="enoughAllowance"
           label="Init"
@@ -79,7 +79,7 @@
           @click="approve"
         />
       </div>
-      <div v-if="status === 'complete' && auction.amountIn > 0n">
+      <div v-if="status === 'complete' && isOwner && auction.amountIn > 0n">
         <HolButton
           label="Withdraw"
           :is-loading="hasPendingTx"
@@ -241,6 +241,15 @@ async function fetchEvents(address: string): Promise<Event[]> {
   const events = await subgraphService.getEvents(address);
   return events;
 }
+
+const isOwner = computed<boolean>(() => {
+  if (!auction.value) {
+    return false;
+  }
+  const owner = auction.value.owner;
+  const address = walletStore.address;
+  return owner === address;
+});
 
 const enoughBalance = computed<boolean>(() => {
   if (!auction.value) {
