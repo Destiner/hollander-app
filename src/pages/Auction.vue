@@ -87,6 +87,15 @@
         />
       </div>
     </div>
+    <div class="events">
+      <h3 class="event-title">Activity</h3>
+      <EventCard
+        v-for="event in events"
+        :key="event.id"
+        :auction="auction"
+        :event="event"
+      />
+    </div>
   </div>
   <div
     v-else
@@ -100,34 +109,23 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
+import EventCard from '@/components/EventCard.vue';
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import Erc20Service from '@/services/erc20';
 import HollanderService from '@/services/hollander';
+import SubgraphService, { Event } from '@/services/subgraph';
 import { useAssetStore, useWalletStore } from '@/stores';
 import { AuctionStatus, getStatus } from '@/utils/auction';
 import { blocksToHours } from '@/utils/converters';
 import { auctionPriceFromWei, fromWei } from '@/utils/formatters';
 
-interface Auction {
-  owner: string;
-  address: string;
-  assetIn: string;
-  assetOut: string;
-  amountIn: bigint;
-  amountOut: bigint;
-  amountOutTotal: bigint;
-  price: bigint;
-  halvingPeriod: number;
-  swapPeriod: number;
-  blockStart: number;
-}
-
 const route = useRoute();
 
 const erc20Service = new Erc20Service();
 const hollanderService = new HollanderService();
+const subgraphService = new SubgraphService();
 
 const assetStore = useAssetStore();
 const walletStore = useWalletStore();
@@ -139,6 +137,7 @@ onMounted(async () => {
     return;
   }
   auction.value = await fetchAuction(address.value);
+  events.value = await fetchEvents(address.value);
   if (!auction.value) {
     return;
   }
@@ -236,6 +235,13 @@ async function fetchAsset(asset: string, auction: string): Promise<void> {
   }
 }
 
+const events = ref<Event[]>([]);
+
+async function fetchEvents(address: string): Promise<Event[]> {
+  const events = await subgraphService.getEvents(address);
+  return events;
+}
+
 const enoughBalance = computed<boolean>(() => {
   if (!auction.value) {
     return false;
@@ -318,8 +324,29 @@ async function withdraw(): Promise<void> {
 }
 </script>
 
+<script lang="ts">
+interface Auction {
+  owner: string;
+  address: string;
+  assetIn: string;
+  assetOut: string;
+  amountIn: bigint;
+  amountOut: bigint;
+  amountOutTotal: bigint;
+  price: bigint;
+  halvingPeriod: number;
+  swapPeriod: number;
+  blockStart: number;
+}
+
+export { Auction };
+</script>
+
 <style scoped>
 .page {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
   padding: 0 24px;
 }
 
@@ -344,5 +371,16 @@ async function withdraw(): Promise<void> {
   display: flex;
   gap: 4px;
   align-items: baseline;
+}
+
+.event-title {
+  margin: 24px 0 4px;
+}
+
+.events {
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  max-width: 600px;
 }
 </style>
