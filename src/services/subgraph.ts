@@ -25,6 +25,7 @@ interface EventResponse {
     inits: {
       id: string;
       timestamp: string;
+      transactionHash: string;
     }[];
     swaps: {
       id: string;
@@ -32,11 +33,13 @@ interface EventResponse {
       buyAmount: string;
       sellAmount: string;
       timestamp: string;
+      transactionHash: string;
     }[];
     withdraws: {
       id: string;
       amount: string;
       timestamp: string;
+      transactionHash: string;
     }[];
   };
 }
@@ -44,6 +47,7 @@ interface EventResponse {
 interface InitEvent {
   id: string;
   timestamp: Date;
+  transactionHash: string;
 }
 
 interface SwapEvent {
@@ -52,12 +56,14 @@ interface SwapEvent {
   buyAmount: bigint;
   sellAmount: bigint;
   timestamp: Date;
+  transactionHash: string;
 }
 
 interface WithdrawEvent {
   id: string;
   amount: bigint;
   timestamp: Date;
+  transactionHash: string;
 }
 
 type Event = InitEvent | SwapEvent | WithdrawEvent;
@@ -112,6 +118,7 @@ class SubgraphService {
             inits(where: { auction: "${address}" }) {
               id
               timestamp
+              transactionHash
             }
             swaps(where: { auction: "${address}" }) {
               id
@@ -119,10 +126,12 @@ class SubgraphService {
               buyer
               buyAmount
               sellAmount
+              transactionHash
             }
             withdraws(where: { auction: "${address}" }) {
               id
               timestamp
+              transactionHash
             }
           }
         `,
@@ -135,28 +144,33 @@ class SubgraphService {
 
     const json = (await response.json()) as EventResponse;
 
+    const initResponse = json.data.inits[0];
     const init: InitEvent = {
-      id: json.data.inits[0].id,
-      timestamp: new Date(parseInt(json.data.inits[0].timestamp) * 1000),
+      id: initResponse.id,
+      timestamp: new Date(parseInt(initResponse.timestamp) * 1000),
+      transactionHash: initResponse.transactionHash,
     };
 
     const swaps: SwapEvent[] = json.data.swaps.map((swap) => {
-      const { id, buyer, buyAmount, sellAmount, timestamp } = swap;
+      const { id, buyer, buyAmount, sellAmount, timestamp, transactionHash } =
+        swap;
       return {
         id,
         buyer,
         buyAmount: BigInt(buyAmount),
         sellAmount: BigInt(sellAmount),
         timestamp: new Date(parseInt(timestamp) * 1000),
+        transactionHash,
       };
     });
 
     const withdrawals: WithdrawEvent[] = json.data.withdraws.map((withdraw) => {
-      const { id, amount, timestamp } = withdraw;
+      const { id, amount, timestamp, transactionHash } = withdraw;
       return {
         id,
         amount: BigInt(amount),
         timestamp: new Date(parseInt(timestamp) * 1000),
+        transactionHash,
       };
     });
 
