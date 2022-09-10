@@ -20,11 +20,6 @@ type ChartType = 'bar' | 'area' | 'line';
 
 type DataType = 'number' | 'money' | 'share';
 
-interface ChartData {
-  name: string;
-  values: number[];
-}
-
 const props = defineProps({
   type: {
     type: String as PropType<ChartType>,
@@ -127,7 +122,7 @@ const options = computed(() => {
       opacity: 1,
     },
     stroke: {
-      show: false,
+      show: type.value === 'line',
     },
   };
 });
@@ -144,6 +139,13 @@ const formatter = computed(() => {
   }
   return formatNumber;
 });
+</script>
+
+<script lang="ts">
+interface ChartData {
+  name: string;
+  values: number[];
+}
 </script>
 
 <style>
