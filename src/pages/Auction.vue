@@ -87,7 +87,20 @@
         />
       </div>
     </div>
-    <div class="events">
+    <div
+      v-if="status === 'draft'"
+      class="chart"
+    >
+      <HolChart
+        :type="'line'"
+        :timestamps="chartData.timestamps"
+        :data="chartData.series"
+      />
+    </div>
+    <div
+      v-if="status !== 'draft'"
+      class="events"
+    >
       <h3 class="event-title">Activity</h3>
       <EventCard
         v-for="event in events"
@@ -112,12 +125,18 @@ import { useRoute } from 'vue-router';
 import EventCard from '@/components/EventCard.vue';
 import HolAsset from '@/components/HolAsset.vue';
 import HolButton from '@/components/HolButton.vue';
+import HolChart from '@/components/HolChart.vue';
 import StatusBadge from '@/components/StatusBadge.vue';
 import Erc20Service from '@/services/erc20';
 import HollanderService from '@/services/hollander';
 import SubgraphService, { Event } from '@/services/subgraph';
 import { useAssetStore, useWalletStore } from '@/stores';
-import { AuctionStatus, getStatus } from '@/utils/auction';
+import {
+  Auction,
+  AuctionStatus,
+  getHistoricalPrice,
+  getStatus,
+} from '@/utils/auction';
 import { blocksToHours } from '@/utils/converters';
 import { auctionPriceFromWei, fromWei } from '@/utils/formatters';
 
@@ -212,6 +231,7 @@ async function fetchAuction(auction: string): Promise<Auction | null> {
     amountIn: amountQuote,
     amountOut: amountBase,
     amountOutTotal: amountBaseTotal,
+    initialPrice,
     price,
     halvingPeriod: parseInt(halvingPeriod.toString()),
     swapPeriod: parseInt(swapPeriod.toString()),
@@ -273,6 +293,27 @@ const enoughAllowance = computed<boolean>(() => {
   return allowance >= auction.value.amountOutTotal;
 });
 
+const chartData = computed(() => {
+  if (!auction.value) {
+    return {
+      timestamps: [],
+      series: [],
+    };
+  }
+  const prices = getHistoricalPrice(auction.value);
+  const timestamps = Object.keys(prices).map((val) => parseInt(val));
+  const series = [
+    {
+      name: 'price',
+      values: Object.values(prices),
+    },
+  ];
+  return {
+    timestamps,
+    series,
+  };
+});
+
 const hasPendingTx = ref(false);
 
 async function init(): Promise<void> {
@@ -331,25 +372,6 @@ async function withdraw(): Promise<void> {
   hasPendingTx.value = false;
   auction.value.amountIn = 0n;
 }
-</script>
-
-<script lang="ts">
-interface Auction {
-  owner: string;
-  address: string;
-  assetIn: string;
-  assetOut: string;
-  amountIn: bigint;
-  amountOut: bigint;
-  amountOutTotal: bigint;
-  price: bigint;
-  halvingPeriod: number;
-  swapPeriod: number;
-  blockStart: number;
-}
-
-// eslint-disable-next-line import/prefer-default-export
-export { Auction };
 </script>
 
 <style scoped>
