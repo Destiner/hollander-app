@@ -131,6 +131,7 @@ class SubgraphService {
             withdraws(where: { auction: "${address}" }) {
               id
               timestamp
+              amount
               transactionHash
             }
           }
