@@ -144,12 +144,13 @@ class SubgraphService {
 
     const json = (await response.json()) as EventResponse;
 
-    const initResponse = json.data.inits[0];
-    const init: InitEvent = {
-      id: initResponse.id,
-      timestamp: new Date(parseInt(initResponse.timestamp) * 1000),
-      transactionHash: initResponse.transactionHash,
-    };
+    const inits: InitEvent[] = json.data.inits.map((init) => {
+      return {
+        id: init.id,
+        timestamp: new Date(parseInt(init.timestamp) * 1000),
+        transactionHash: init.transactionHash,
+      };
+    });
 
     const swaps: SwapEvent[] = json.data.swaps.map((swap) => {
       const { id, buyer, buyAmount, sellAmount, timestamp, transactionHash } =
@@ -174,7 +175,7 @@ class SubgraphService {
       };
     });
 
-    const events = [init, ...swaps, ...withdrawals];
+    const events = [...inits, ...swaps, ...withdrawals];
     events.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     return events;
   }
