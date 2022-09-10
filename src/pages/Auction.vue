@@ -156,7 +156,7 @@ onMounted(async () => {
     return;
   }
   auction.value = await fetchAuction(address.value);
-  events.value = await fetchEvents(address.value);
+  events.value = await fetchEvents(address.value.toLowerCase());
   if (!auction.value) {
     return;
   }
