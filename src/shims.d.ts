@@ -10,5 +10,5 @@ declare module '*.vue' {
 }
 
 interface Window {
-  ethereum: any;
+  ethereum: unknown;
 }
