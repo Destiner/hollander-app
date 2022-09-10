@@ -56,8 +56,8 @@
 import HolAsset from './HolAsset.vue';
 import HolCard from './HolCard.vue';
 
-import { Auction } from '@/pages/Auction.vue';
 import { Event } from '@/services/subgraph';
+import { Auction } from '@/utils/auction';
 import { fromWei } from '@/utils/formatters';
 
 defineProps<{
