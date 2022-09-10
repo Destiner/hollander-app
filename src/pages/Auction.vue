@@ -266,7 +266,7 @@ const isOwner = computed<boolean>(() => {
   if (!auction.value) {
     return false;
   }
-  const owner = auction.value.owner;
+  const owner = auction.value.owner.toLowerCase();
   const address = walletStore.address;
   return owner === address;
 });
@@ -403,6 +403,10 @@ async function withdraw(): Promise<void> {
   display: flex;
   gap: 4px;
   align-items: baseline;
+}
+
+.chart {
+  max-width: 500px;
 }
 
 .event-title {
