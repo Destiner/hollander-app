@@ -71,10 +71,11 @@ function getProvider(): Provider {
 }
 
 function getSigner(): JsonRpcSigner | null {
-  if (!window.ethereum) {
+  const ethereum = window.ethereum as ExternalProvider;
+  if (!ethereum) {
     return null;
   }
-  const signingProvider = new Web3Provider(window.ethereum, CHAIN_ID);
+  const signingProvider = new Web3Provider(ethereum, CHAIN_ID);
   return signingProvider.getSigner();
 }
 
