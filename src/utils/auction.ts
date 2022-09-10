@@ -29,7 +29,7 @@ function getStatus(blockStart: number, amountOut: bigint): AuctionStatus {
 
 function getHistoricalPrice(auction: Auction): Record<number, number> {
   const startTime = Date.now() + 0;
-  const endTime = startTime + 8 * 60 * 60 * 1000;
+  const endTime = startTime + 16 * 60 * 60 * 1000;
   const step = 10 * 60 * 1000;
   const prices: Record<number, number> = {};
   for (let time = startTime; time < endTime; time += step) {
