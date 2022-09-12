@@ -219,7 +219,7 @@ async function fetchAuction(auction: string): Promise<Auction | null> {
       ? await hollanderService.getPrice(auction, 0n)
       : initialPrice;
 
-  if (!price) {
+  if (price == null) {
     return null;
   }
 
